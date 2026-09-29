@@ -37,11 +37,13 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
   const abs = p => new URL(p, document.baseURI).href;
   // Each plate gets one of 2 silhouettes per fighter/tab, possibly mirrored, picked from its id so it never changes.
   const hashOf = id => [...id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
-  const artFor = (s, h) => abs(`img/plates/${fighter}-${s.tab}-${'bc'[h % 2]}.webp`);   // always the current fighter's colours
-  // On the favorites tab a fighter's own sound says whose it is, since the colours no longer show it.
-  const labelFor = s => tab === 'favorites' && s.fighter ? `${fighters.get(s.fighter).name} ${s.label}` : s.label;
+  // A fighter's own sounds always wear that fighter's buttons (so Ken's and Ryu's tell apart in the shared star list);
+  // shared sounds wear the buttons of the fighter whose page you are on.
+  const ownerOf = s => s.fighter || fighter;
+  const artFor = (s, h) => abs(`img/plates/${ownerOf(s)}-${s.tab}-${'bc'[h % 2]}.webp`);
+  const labelFor = s => s.label;
   const soundsForTab = () => tab === 'favorites'
-    ? store.get().favorites.map(id => byId.get(id)).filter(Boolean)
+    ? store.get().favorites.map(id => byId.get(id)).filter(Boolean)             // one star list for both fighters, each sound once
     : catalog.sounds.filter(s => s.tab === tab && (!s.fighter || s.fighter === fighter));
 
   function setStar(plate, on) {
@@ -59,7 +61,7 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
     const flipped = (h >>> 5) % 2 === 1;
     if (flipped) { el.dataset.flip = '1'; el.style.setProperty('--flip', '-1'); }
     // Put the label in the middle of this picture's dark opening (measured by tools/optimize_art.py), not the middle of the picture.
-    const [cx, cy, w, oh] = layout[`${fighter}-${s.tab}-${'bc'[h % 2]}`] || [0.5, 0.5, 0.68, 0.55];
+    const [cx, cy, w, oh] = layout[`${ownerOf(s)}-${s.tab}-${'bc'[h % 2]}`] || [0.5, 0.5, 0.68, 0.55];
     el.style.setProperty('--cx', `${(flipped ? 1 - cx : cx) * 100}%`);
     el.style.setProperty('--cy', `${cy * 100}%`);
     el.style.setProperty('--lw', `${w * 90}%`);
@@ -76,10 +78,10 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
     label.append(txt);
     setStar(el, store.isFavorite(s.id));
     bindPlate(el, {
-      onTap: (x, y) => { engine.play(s.id, s.id); burst(el, s.fx || 'default', x, y); },
+      onTap: (x, y) => { engine.play(s.id, s.id, store.favoriteEffects(s.id)); burst(el, s.fx || 'default', x, y); },
       onHold: () => { engine.stopKey(s.id); el.classList.add('cancelled'); setTimeout(() => el.classList.remove('cancelled'), 220); },
       onStar: () => {
-        const on = store.toggleFavorite(s.id);
+        const on = store.toggleFavorite(s.id);                // starring also saves the FX settings as they are right now
         el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 260);
         if (tab === 'favorites' && !on) setTimeout(renderGrid, 200);
       },
@@ -175,7 +177,7 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
       lastSize = state.gridSize; gridEl.dataset.size = state.gridSize; fitLabels();
       for (const b of sizesEl.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.dataset.size === state.gridSize));
     }
-    for (const p of gridEl.querySelectorAll('.plate')) setStar(p, state.favorites.includes(p.dataset.id));
+    for (const p of gridEl.querySelectorAll('.plate')) setStar(p, store.isFavorite(p.dataset.id));
   });
   store.set({});                                   // sync the size buttons with the saved state
 

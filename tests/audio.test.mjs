@@ -6,6 +6,7 @@ class Param { constructor(v = 0) { this.value = v; } setTargetAtTime(v) { this.v
 class Node { connect(n) { return n; } disconnect() {} }
 class Gain extends Node { gain = new Param(1); }
 class Delay extends Node { delayTime = new Param(0); }
+class Filter extends Node { frequency = new Param(0); gain = new Param(0); Q = new Param(1); type = ''; }
 class Source extends Node {
   start() { this.started = true; }
   stop() { this.stopped = true; this.onended?.(); }
@@ -14,6 +15,7 @@ class FakeCtx {
   sampleRate = 8000; currentTime = 0; state = 'running'; destination = new Node();
   createGain() { return new Gain(); }
   createDelay() { return new Delay(); }
+  createBiquadFilter() { return new Filter(); }
   createConvolver() { return new Node(); }
   createBufferSource() { return new Source(); }
   createBuffer(ch, len) { return { getChannelData: () => new Float32Array(len) }; }
@@ -56,8 +58,33 @@ test('unknown sound plays nothing', async () => {
 });
 test('effect amounts are clamped and applied', async () => {
   const e = await engine();
-  e.setReverb(5); e.setEcho(-1); e.setVolume(0.5);
-  assert.ok(e.reverbWet.gain.value <= 1.1 && e.reverbWet.gain.value > 0);
-  assert.equal(e.echoWet.gain.value, 0);
+  e.setReverb(5); e.setEcho(-1); e.setVolume(0.5); e.setEq(30, -30, 4);
+  assert.equal(e.settings.reverb, 1); assert.equal(e.settings.echo, 0);
   assert.equal(e.master.gain.value, 0.5);
+  assert.deepEqual([e.settings.low, e.settings.mid, e.settings.high], [12, -12, 4]);
+});
+test('a sound with no saved settings uses the everyday ones', async () => {
+  const e = await engine();
+  e.setReverb(0.5); e.setEq(3, 0, -2);
+  const v = e.play('a');
+  assert.equal(v.reverbSend.gain.value, 0.5); assert.equal(v.low.gain.value, 3); assert.equal(v.high.gain.value, -2);
+});
+test('a sound with its own settings ignores the everyday ones', async () => {
+  const e = await engine();
+  e.setReverb(0.5); e.setEq(3, 0, -2);
+  const v = e.play('a', 'k', { reverb: 0.9, echo: 0.1, low: -6, mid: 5, high: 0 });
+  assert.equal(v.reverbSend.gain.value, 0.9); assert.equal(v.echoSend.gain.value, 0.1);
+  assert.equal(v.low.gain.value, -6); assert.equal(v.mid.gain.value, 5);
+});
+test('moving a slider changes sounds still playing with everyday settings, not the ones with their own', async () => {
+  const e = await engine();
+  const plain = e.play('a', 'x'), own = e.play('b', 'y', { reverb: 0.8, echo: 0, low: 0, mid: 0, high: 0 });
+  e.setReverb(0.3);
+  assert.equal(plain.reverbSend.gain.value, 0.3);
+  assert.equal(own.reverbSend.gain.value, 0.8);
+});
+test('the three EQ bands are low shelf, mid peak and high shelf', async () => {
+  const e = await engine();
+  const v = e.play('a');
+  assert.deepEqual([v.low.type, v.mid.type, v.high.type], ['lowshelf', 'peaking', 'highshelf']);
 });

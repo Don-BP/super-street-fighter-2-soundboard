@@ -1,3 +1,4 @@
+const EQ_RANGE = 12;      // decibels either way for each of low, mid and high
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, Number(v) || 0));
 
 export function makeImpulse(ctx, seconds = 1.8, decay = 2.6) {
@@ -25,20 +26,23 @@ export class SoundEngine {
     const ctx = this.ctx = new AudioCtx();
     this.buffers = new Map();
     this.voices = new Map();               // buttonKey -> Set of { src, gain, key }
-    this.input = ctx.createGain();
     this.master = ctx.createGain(); this.master.gain.value = 0.9;
     this.master.connect(ctx.destination);
-    this.input.connect(this.master);       // dry path
+    // The everyday settings. A sound that has its own saved settings ignores these.
+    this.settings = { reverb: 0, echo: 0, low: 0, mid: 0, high: 0 };
 
+    // One shared reverb room and one shared echo. Every sound sends its own amount into them.
     const conv = ctx.createConvolver(); conv.buffer = makeImpulse(ctx);
-    this.reverbWet = ctx.createGain(); this.reverbWet.gain.value = 0;
-    this.input.connect(conv); conv.connect(this.reverbWet); this.reverbWet.connect(this.master);
+    this.reverbIn = ctx.createGain();
+    const reverbOut = ctx.createGain(); reverbOut.gain.value = 1.1;
+    this.reverbIn.connect(conv); conv.connect(reverbOut); reverbOut.connect(this.master);
 
     const delay = ctx.createDelay(1.0); delay.delayTime.value = 0.28;
-    this.echoFeedback = ctx.createGain(); this.echoFeedback.gain.value = 0.25;
-    this.echoWet = ctx.createGain(); this.echoWet.gain.value = 0;
-    this.input.connect(delay); delay.connect(this.echoFeedback); this.echoFeedback.connect(delay);
-    delay.connect(this.echoWet); this.echoWet.connect(this.master);
+    const feedback = ctx.createGain(); feedback.gain.value = 0.4;
+    this.echoIn = ctx.createGain();
+    const echoOut = ctx.createGain(); echoOut.gain.value = 0.9;
+    this.echoIn.connect(delay); delay.connect(feedback); feedback.connect(delay);
+    delay.connect(echoOut); echoOut.connect(this.master);
   }
 
   async load(sounds, onProgress = () => {}, fetchFn = globalThis.fetch?.bind(globalThis)) {
@@ -72,19 +76,43 @@ export class SoundEngine {
     this._keepAlive = a;
   }
 
-  play(id, key = id) {
+  // fx (optional): this sound's own { reverb, echo, low, mid, high }. Without it the sound follows the everyday settings.
+  play(id, key = id, fx = null) {
     const buffer = this.buffers.get(id);
     if (!buffer) return null;
     if (this.ctx.state === 'suspended') this.ctx.resume();
-    const src = this.ctx.createBufferSource(); src.buffer = buffer;
-    const gain = this.ctx.createGain();
-    src.connect(gain); gain.connect(this.input);
-    const voice = { src, gain, key };
+    const ctx = this.ctx, mix = fx ? { ...this.settings, ...fx } : this.settings;
+    const src = ctx.createBufferSource(); src.buffer = buffer;
+    const gain = ctx.createGain();
+    const low = ctx.createBiquadFilter(); low.type = 'lowshelf'; low.frequency.value = 200;
+    const mid = ctx.createBiquadFilter(); mid.type = 'peaking'; mid.frequency.value = 1000; mid.Q.value = 0.8;
+    const high = ctx.createBiquadFilter(); high.type = 'highshelf'; high.frequency.value = 4000;
+    const post = ctx.createGain(), reverbSend = ctx.createGain(), echoSend = ctx.createGain();
+    src.connect(gain); gain.connect(low); low.connect(mid); mid.connect(high); high.connect(post);
+    post.connect(this.master);                                   // dry sound
+    post.connect(reverbSend); reverbSend.connect(this.reverbIn);
+    post.connect(echoSend); echoSend.connect(this.echoIn);
+    const voice = { src, gain, key, low, mid, high, reverbSend, echoSend, post, own: !!fx };
+    this._shape(voice, mix, true);
     if (!this.voices.has(key)) this.voices.set(key, new Set());
     this.voices.get(key).add(voice);
-    src.onended = () => { this._drop(voice); try { gain.disconnect(); } catch { /* already gone */ } };
+    src.onended = () => { this._drop(voice); try { post.disconnect(); gain.disconnect(); } catch { /* already gone */ } };
     src.start();
     return voice;
+  }
+
+  _shape(voice, mix, now = false) {
+    const t = this.ctx.currentTime, set = (param, v) => now ? (param.value = v) : param.setTargetAtTime(v, t, 0.02);
+    set(voice.reverbSend.gain, clamp(mix.reverb, 0, 1));
+    set(voice.echoSend.gain, clamp(mix.echo, 0, 1));
+    set(voice.low.gain, clamp(mix.low, -EQ_RANGE, EQ_RANGE));
+    set(voice.mid.gain, clamp(mix.mid, -EQ_RANGE, EQ_RANGE));
+    set(voice.high.gain, clamp(mix.high, -EQ_RANGE, EQ_RANGE));
+  }
+
+  // Sounds still playing with the everyday settings follow slider moves live; sounds with their own settings do not.
+  _followEveryday() {
+    for (const set of this.voices.values()) for (const v of set) if (!v.own) this._shape(v, this.settings);
   }
 
   _drop(voice) {
@@ -108,10 +136,10 @@ export class SoundEngine {
   stopAll() { for (const k of [...this.voices.keys()]) this.stopKey(k); }
 
   setVolume(v) { this.master.gain.setTargetAtTime(clamp(v, 0, 1), this.ctx.currentTime, 0.02); }
-  setReverb(v) { this.reverbWet.gain.setTargetAtTime(clamp(v, 0, 1) * 1.1, this.ctx.currentTime, 0.02); }
-  setEcho(v) {
-    const a = clamp(v, 0, 1), t = this.ctx.currentTime;
-    this.echoWet.gain.setTargetAtTime(a * 0.9, t, 0.02);
-    this.echoFeedback.gain.setTargetAtTime(0.25 + a * 0.35, t, 0.02);
+  setReverb(v) { this.settings.reverb = clamp(v, 0, 1); this._followEveryday(); }
+  setEcho(v) { this.settings.echo = clamp(v, 0, 1); this._followEveryday(); }
+  setEq(low, mid, high) {
+    Object.assign(this.settings, { low: clamp(low, -EQ_RANGE, EQ_RANGE), mid: clamp(mid, -EQ_RANGE, EQ_RANGE), high: clamp(high, -EQ_RANGE, EQ_RANGE) });
+    this._followEveryday();
   }
 }

@@ -10,7 +10,7 @@ test('index.html links only to files that exist', () => {
 });
 test('index.html has every id the code needs', () => {
   for (const id of ['loader', 'loader-bar', 'loader-text', 'start', 'select', 'board', 'back', 'fighter-name', 'stop-all',
-    'open-sheet', 'tabs', 'sizes', 'grid', 'sheet', 'vol', 'reverb', 'echo', 'reset', 'close', 'wipe'])
+    'open-sheet', 'tabs', 'sizes', 'grid', 'sheet', 'vol', 'vol-btn', 'vol-pop', 'vol-quick', 'vol-num', 'reverb', 'echo', 'eq-low', 'eq-mid', 'eq-high', 'reset', 'close', 'wipe'])
     assert.match(html, new RegExp(`id="${id}"`), `missing #${id}`);
 });
 test('no external network resources', () => {

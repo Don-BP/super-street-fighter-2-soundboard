@@ -31,11 +31,11 @@ async function boot() {
     els: { root: $('board'), tabsEl: $('tabs'), gridEl: $('grid'), nameEl: $('fighter-name'), sizesEl: $('sizes') },
   });
 
-  const applyFx = s => { engine.setVolume(s.volume); engine.setReverb(s.reverb); engine.setEcho(s.echo); };
-  const syncSliders = s => { $('vol').value = s.volume * 100; $('vol-quick').value = s.volume * 100; $('vol-num').textContent = Math.round(s.volume * 100); $('reverb').value = s.reverb * 100; $('echo').value = s.echo * 100; };
+  const applyFx = s => { engine.setVolume(s.volume); engine.setReverb(s.reverb); engine.setEcho(s.echo); engine.setEq(s.eqLow, s.eqMid, s.eqHigh); };
+  const syncSliders = s => { $('vol').value = s.volume * 100; $('vol-quick').value = s.volume * 100; $('vol-num').textContent = Math.round(s.volume * 100); $('reverb').value = s.reverb * 100; $('echo').value = s.echo * 100; $('eq-low').value = s.eqLow; $('eq-mid').value = s.eqMid; $('eq-high').value = s.eqHigh; };
   applyFx(store.get()); syncSliders(store.get());
-  for (const [id, key] of [['vol', 'volume'], ['vol-quick', 'volume'], ['reverb', 'reverb'], ['echo', 'echo']])
-    $(id).addEventListener('input', () => { store.set({ [key]: $(id).value / 100 }); applyFx(store.get()); });
+  for (const [id, key, scale] of [['vol', 'volume', 100], ['vol-quick', 'volume', 100], ['reverb', 'reverb', 100], ['echo', 'echo', 100], ['eq-low', 'eqLow', 1], ['eq-mid', 'eqMid', 1], ['eq-high', 'eqHigh', 1]])
+    $(id).addEventListener('input', () => { store.set({ [key]: $(id).value / scale }); applyFx(store.get()); });
   // VOL button: a big slider pops up; it closes when you tap outside it, or a few seconds after you stop moving it.
   const volPop = $('vol-pop');
   let volTimer = 0;
@@ -46,7 +46,7 @@ async function boot() {
   $('vol-quick').addEventListener('input', keepVolOpen);
   addEventListener('keydown', e => { if (e.key === 'Escape' && !volPop.hidden) closeVol(); });
   store.subscribe(syncSliders);                   // moving one volume slider moves the other
-  $('reset').addEventListener('click', () => { store.set({ volume: 0.9, reverb: 0, echo: 0 }); applyFx(store.get()); syncSliders(store.get()); });
+  $('reset').addEventListener('click', () => { store.set({ volume: 0.9, reverb: 0, echo: 0, eqLow: 0, eqMid: 0, eqHigh: 0 }); applyFx(store.get()); syncSliders(store.get()); });
 
   const sheet = $('sheet');
   $('open-sheet').addEventListener('click', () => { sheet.hidden = false; requestAnimationFrame(() => sheet.classList.add('open')); });

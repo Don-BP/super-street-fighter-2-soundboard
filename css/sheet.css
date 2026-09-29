@@ -6,11 +6,13 @@
   padding: 18px 18px calc(18px + env(safe-area-inset-bottom)); background: var(--navy);
   border: 4px solid var(--accent); border-bottom: 0; box-shadow: 0 0 24px var(--accent2);
   transform: translateY(100%); transition: transform .22s cubic-bezier(.2, .9, .3, 1);
+  max-height: 94dvh; overflow-y: auto;
 }
+#sheet .hint { margin: 4px 0 0; font-size: 8px; line-height: 1.8; color: #aeb7d6; text-transform: none; letter-spacing: 0; }
 #sheet.open .backdrop { opacity: 1; }
 #sheet.open .panel { transform: none; }
 #sheet h3 { margin: 0 0 6px; font-size: 14px; color: var(--accent); text-shadow: 2px 2px 0 #000; }
-#sheet label { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 12px; margin: 16px 0; font-size: 11px; }
+#sheet label { display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 12px; margin: 12px 0; font-size: 11px; }
 
 #sheet input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin: 0; }
 #sheet input[type="range"]::-webkit-slider-runnable-track { height: 12px; border: 2px solid #fff; background: repeating-linear-gradient(90deg, #26305c 0 6px, #1a2144 6px 8px); }
