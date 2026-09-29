@@ -1,4 +1,4 @@
-const CACHE = 'ssf2sb-v8';
+const CACHE = 'ssf2sb-v9';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/select.css', 'css/board.css', 'css/sheet.css', 'css/ui-art.css', 'fonts/super-street-fighter-ii-large.otf', 'data/plate-layout.json', 'data/emblems.json',
   'js/main.js', 'js/store.js', 'js/audio.js', 'js/board.js', 'js/fx.js', 'js/transitions.js', 'js/heat.js', 'img/title/title.webp', 'img/title/flames.webp', 'data/catalog.json',
   'img/icon-192.png', 'img/icon-512.png', 'img/select/bg.webp', 'sounds/ui-press-start.mp3', 'sounds/ui-character-select.mp3',

@@ -43,3 +43,8 @@ test('every shared tab has sounds', () => {
   for (const t of cat.tabs.filter(t => !t.perFighter))
     assert.ok(cat.sounds.some(s => s.tab === t.id), `tab ${t.id} is empty`);
 });
+
+test('exactly the electric and two zap sounds repeat while held', () => {
+  const held = cat.sounds.filter(s => s.hold === 'repeat').map(s => s.id).sort();
+  assert.deepEqual(held, ['electric', 'zap-1', 'zap-2']);
+});

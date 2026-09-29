@@ -103,6 +103,8 @@ for k, n in enumerate((35, 36, 37), start=1):
     add(f"crate-{k}", f"CRATE {k}", "stage", snes(n))
 add("plane", "PLANE", "stage", snes(4))
 
+HOLD_REPEAT = {"electric", "zap-1", "zap-2"}     # these keep playing over and over while the button is held down
+
 # ---- write files ----
 ids = [s[0] for s in sounds]
 assert len(ids) == len(set(ids)), "duplicate ids"
@@ -123,6 +125,8 @@ for id_, label, tab, fighter, _src, fx in sounds:
     entry["file"] = f"sounds/{id_}.mp3"
     if fx:
         entry["fx"] = fx
+    if id_ in HOLD_REPEAT:
+        entry["hold"] = "repeat"
     cat["sounds"].append(entry)
 
 with open(os.path.join("data", "catalog.json"), "w", encoding="utf-8") as fh:

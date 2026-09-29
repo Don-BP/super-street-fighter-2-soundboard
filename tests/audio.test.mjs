@@ -8,6 +8,7 @@ class Gain extends Node { gain = new Param(1); }
 class Delay extends Node { delayTime = new Param(0); }
 class Filter extends Node { frequency = new Param(0); gain = new Param(0); Q = new Param(1); type = ''; }
 class Source extends Node {
+  loop = false;
   start() { this.started = true; }
   stop() { this.stopped = true; this.onended?.(); }
 }
@@ -87,4 +88,22 @@ test('the three EQ bands are low shelf, mid peak and high shelf', async () => {
   const e = await engine();
   const v = e.play('a');
   assert.deepEqual([v.low.type, v.mid.type, v.high.type], ['lowshelf', 'peaking', 'highshelf']);
+});
+test('a held sound loops until it is released, then finishes its current pass', async () => {
+  const e = await engine();
+  const v = e.play('a', 'zap', null, { loop: true });
+  assert.equal(v.src.loop, true);
+  assert.ok(e.isPlaying('zap'));
+  e.release(v);
+  assert.equal(v.src.loop, false);
+});
+test('a normal tap does not loop', async () => {
+  const e = await engine();
+  assert.equal(e.play('a').src.loop, false);
+});
+test('stopping a held sound works and releasing nothing is harmless', async () => {
+  const e = await engine();
+  e.play('a', 'zap', null, { loop: true });
+  assert.equal(e.stopKey('zap'), 1);
+  assert.doesNotThrow(() => e.release(null));
 });

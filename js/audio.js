@@ -1,3 +1,4 @@
+const MAX_HOLD_SECONDS = 20;    // a held-down repeating sound never repeats longer than this
 const EQ_RANGE = 12;      // decibels either way for each of low, mid and high
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, Number(v) || 0));
 
@@ -77,7 +78,8 @@ export class SoundEngine {
   }
 
   // fx (optional): this sound's own { reverb, echo, low, mid, high }. Without it the sound follows the everyday settings.
-  play(id, key = id, fx = null) {
+  // opts.loop: keep repeating until release(voice) is called (used while a button is held down).
+  play(id, key = id, fx = null, opts = {}) {
     const buffer = this.buffers.get(id);
     if (!buffer) return null;
     if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -97,8 +99,21 @@ export class SoundEngine {
     if (!this.voices.has(key)) this.voices.set(key, new Set());
     this.voices.get(key).add(voice);
     src.onended = () => { this._drop(voice); try { post.disconnect(); gain.disconnect(); } catch { /* already gone */ } };
+    if (opts.loop) {
+      src.loop = true;
+      // Safety net: if the finger-lift is ever missed (app switched away, say), do not repeat forever.
+      voice.watchdog = setTimeout(() => this.release(voice), MAX_HOLD_SECONDS * 1000);
+      voice.watchdog.unref?.();
+    }
     src.start();
     return voice;
+  }
+
+  // Stop repeating; the pass that is playing right now finishes on its own.
+  release(voice) {
+    if (!voice) return;
+    clearTimeout(voice.watchdog);
+    try { voice.src.loop = false; } catch { /* already gone */ }
   }
 
   _shape(voice, mix, now = false) {
@@ -127,6 +142,7 @@ export class SoundEngine {
     if (!set) return 0;
     const all = [...set], t = this.ctx.currentTime;
     for (const v of all) {
+      clearTimeout(v.watchdog);
       v.gain.gain.setTargetAtTime(0, t, 0.012);     // tiny fade avoids a click
       try { v.src.stop(t + 0.06); } catch { /* already stopped */ }
       this._drop(v);

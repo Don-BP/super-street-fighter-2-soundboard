@@ -216,7 +216,8 @@
    "id": "electric",
    "label": "ELECTRIC",
    "tab": "hits",
-   "file": "sounds/electric.mp3"
+   "file": "sounds/electric.mp3",
+   "hold": "repeat"
   },
   {
    "id": "on-fire",
@@ -366,13 +367,15 @@
    "id": "zap-1",
    "label": "ZAP 1",
    "tab": "hits",
-   "file": "sounds/zap-1.mp3"
+   "file": "sounds/zap-1.mp3",
+   "hold": "repeat"
   },
   {
    "id": "zap-2",
    "label": "ZAP 2",
    "tab": "hits",
-   "file": "sounds/zap-2.mp3"
+   "file": "sounds/zap-2.mp3",
+   "hold": "repeat"
   },
   {
    "id": "announcer-round",

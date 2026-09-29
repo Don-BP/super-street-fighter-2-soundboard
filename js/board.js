@@ -3,18 +3,19 @@ import { burst } from './fx.js';
 const HOLD_MS = 500;
 const STAR = '<svg viewBox="0 0 7 7" shape-rendering="crispEdges" aria-hidden="true"><path d="M3 0h1v1H3zM2 1h3v1H2zM0 2h7v1H0zM1 3h5v1H1zM2 4h3v1H2zM1 5h2v1H1zM4 5h2v1H4zM1 6h1v1H1zM5 6h1v1H5z"/></svg>';
 
-/** tap = instant play; hold HOLD_MS = cancel this button's sounds; star = favorite. */
-function bindPlate(plate, { onTap, onHold, onStar }) {
+/** tap = instant play; hold HOLD_MS = cancel this button's sounds; star = favorite.
+ *  repeat buttons (zaps) do the opposite of cancel: they keep playing over and over while the finger stays down. */
+function bindPlate(plate, { repeat = false, onTap, onHold, onRelease, onStar }) {
   let timer = null;
   const clear = () => { clearTimeout(timer); timer = null; plate.classList.remove('holding'); };
   plate.addEventListener('pointerdown', e => {
     if (e.target.closest('.star')) return;
     e.preventDefault();
-    onTap(e.clientX, e.clientY);
+    onTap(e.clientX, e.clientY, true);
     plate.classList.add('holding');
-    timer = setTimeout(() => { clear(); onHold(); }, HOLD_MS);
+    if (!repeat) timer = setTimeout(() => { clear(); onHold(); }, HOLD_MS);
   });
-  for (const t of ['pointerup', 'pointercancel', 'pointerleave']) plate.addEventListener(t, clear);
+  for (const t of ['pointerup', 'pointercancel', 'pointerleave']) plate.addEventListener(t, () => { clear(); if (repeat) onRelease(); });
   plate.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(); }
     if (e.key === 'Escape') onHold();
@@ -77,8 +78,24 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
     txt.className = 'txt'; txt.textContent = labelFor(s);
     label.append(txt);
     setStar(el, store.isFavorite(s.id));
+    const repeat = s.hold === 'repeat';
+    let held = null, pulse = 0;                           // the sound and the sparks that repeat while the finger is down
+    const letGo = () => { clearInterval(pulse); engine.release(held); held = null; };
     bindPlate(el, {
-      onTap: (x, y) => { engine.play(s.id, s.id, store.favoriteEffects(s.id)); burst(el, s.fx || 'default', x, y); },
+      repeat,
+      onTap: (x, y, fingerDown) => {
+        const fx = store.favoriteEffects(s.id);
+        if (repeat && fingerDown) {
+          letGo();
+          held = engine.play(s.id, s.id, fx, { loop: true });
+          burst(el, s.fx || 'default', x, y);
+          const cycle = (engine.buffers.get(s.id)?.duration || 0.3) * 1000;
+          pulse = setInterval(() => burst(el, s.fx || 'default', x, y), Math.max(150, cycle));
+        } else {
+          engine.play(s.id, s.id, fx); burst(el, s.fx || 'default', x, y);
+        }
+      },
+      onRelease: letGo,
       onHold: () => { engine.stopKey(s.id); el.classList.add('cancelled'); setTimeout(() => el.classList.remove('cancelled'), 220); },
       onStar: () => {
         const on = store.toggleFavorite(s.id);                // starring also saves the FX settings as they are right now
