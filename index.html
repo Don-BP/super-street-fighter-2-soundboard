@@ -2,29 +2,73 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SSF2 Sounds">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Super Street Fighter 2 Soundboard</title>
-<style>
-  :root { color-scheme: dark; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: #14161f;
-    color: #f2f2f5;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    text-align: center;
-    padding: 0 16px;
-  }
-  h1 { font-size: clamp(1.6rem, 6vw, 3rem); margin: 0 0 .5rem; letter-spacing: .02em; }
-  p { margin: 0; color: #9aa0b4; }
-</style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/select.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/sheet.css">
+<link rel="stylesheet" href="css/ui-art.css">
 </head>
-<body>
-  <main>
-    <h1>Super Street Fighter 2 Soundboard</h1>
-    <p>Coming soon.</p>
-  </main>
+<body data-screen="loading" data-theme="ryu">
+<div id="loader">
+  <canvas id="heat" aria-hidden="true"></canvas>
+  <h1 class="title-art"><img src="img/title/title.webp" width="920" height="454" alt="Super Street Fighter II X"><span>SOUNDBOARD</span></h1>
+  <div class="bar"><i id="loader-bar"></i></div>
+  <p id="loader-text">LOADING…</p>
+  <button id="start" hidden>PRESS START</button>
+</div>
+<main id="select" class="screen" hidden>
+  <h1 class="title">CHOOSE YOUR<br>FIGHTER</h1>
+  <div class="cards">
+    <button class="fighter-card" data-fighter="ryu"><span class="card-bg"></span><img class="idle" src="img/select/ryu-idle-still.webp" data-anim="img/select/ryu-idle.webp" alt=""><span class="name">RYU</span></button>
+    <button class="fighter-card" data-fighter="ken"><span class="card-bg"></span><img class="idle" src="img/select/ken-idle-still.webp" data-anim="img/select/ken-idle.webp" alt=""><span class="name">KEN</span></button>
+  </div>
+</main>
+<section id="board" class="screen" hidden>
+  <video id="bg-video" class="bg-video" muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true"></video>
+  <header id="board-head">
+    <button id="back" aria-label="Back to fighter select">◀</button>
+    <h2 id="fighter-name"></h2>
+    <button id="vol-btn" aria-haspopup="dialog" aria-expanded="false">VOL</button>
+    <button id="stop-all">STOP</button>
+    <button id="open-sheet" aria-label="Sound effects">FX</button>
+  </header>
+  <nav id="tabs" role="tablist"></nav>
+  <div id="sizes" role="group" aria-label="Button size">
+    <button data-size="large" aria-label="Large buttons">L</button>
+    <button data-size="medium" aria-label="Medium buttons">M</button>
+    <button data-size="mini" aria-label="Mini buttons">S</button>
+  </div>
+  <div id="grid" data-size="medium"></div>
+</section>
+<div id="vol-pop" hidden>
+  <div class="backdrop"></div>
+  <div class="panel" role="dialog" aria-label="Volume">
+    <div class="top"><span>VOLUME</span><b id="vol-num">90</b></div>
+    <input id="vol-quick" type="range" min="0" max="100" aria-label="Volume">
+  </div>
+</div>
+<aside id="sheet" hidden>
+  <div class="backdrop"></div>
+  <div class="panel">
+    <h3>SOUND FX</h3>
+    <label>VOLUME <input id="vol" type="range" min="0" max="100"></label>
+    <label>REVERB <input id="reverb" type="range" min="0" max="100"></label>
+    <label>ECHO <input id="echo" type="range" min="0" max="100"></label>
+    <div class="row"><button id="reset">RESET</button><button id="close">DONE</button></div>
+    <p class="credits">Fan project, not for sale. Game sounds © Capcom, ripped by The Sounds Resource contributors. Font "Super Street Fighter II (Large)" by Patrick H. Lauke, CC BY 3.0.</p>
+  </div>
+</aside>
+<div id="wipe"></div>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>

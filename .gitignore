@@ -3,3 +3,7 @@
 node_modules/
 .DS_Store
 Thumbs.db
+assets/
+art_raw/
+art_tests/
+docs/

@@ -1,0 +1,660 @@
+{
+ "version": 1,
+ "fighters": [
+  {
+   "id": "ryu",
+   "name": "RYU",
+   "theme": "ryu"
+  },
+  {
+   "id": "ken",
+   "name": "KEN",
+   "theme": "ken"
+  }
+ ],
+ "tabs": [
+  {
+   "id": "fighter",
+   "label": "FIGHTER",
+   "perFighter": true
+  },
+  {
+   "id": "hits",
+   "label": "HITS"
+  },
+  {
+   "id": "announcer",
+   "label": "ANNOUNCER"
+  },
+  {
+   "id": "score",
+   "label": "SCORE"
+  },
+  {
+   "id": "stage",
+   "label": "STAGE"
+  }
+ ],
+ "sounds": [
+  {
+   "id": "ryu-hadouken",
+   "label": "HADOUKEN",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-hadouken.mp3",
+   "fx": "energy"
+  },
+  {
+   "id": "ryu-shoryuken",
+   "label": "SHORYUKEN",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-shoryuken.mp3",
+   "fx": "flame"
+  },
+  {
+   "id": "ryu-tatsumaki",
+   "label": "TATSUMAKI",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-tatsumaki.mp3"
+  },
+  {
+   "id": "ryu-throw",
+   "label": "THROW",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-throw.mp3"
+  },
+  {
+   "id": "ryu-defeat",
+   "label": "DEFEAT",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-defeat.mp3"
+  },
+  {
+   "id": "ryu-grunt-1",
+   "label": "GRUNT 1",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-grunt-1.mp3"
+  },
+  {
+   "id": "ryu-grunt-2",
+   "label": "GRUNT 2",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-grunt-2.mp3"
+  },
+  {
+   "id": "ryu-ouch",
+   "label": "OUCH",
+   "tab": "fighter",
+   "fighter": "ryu",
+   "file": "sounds/ryu-ouch.mp3"
+  },
+  {
+   "id": "ken-hadouken",
+   "label": "HADOUKEN",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-hadouken.mp3",
+   "fx": "energy"
+  },
+  {
+   "id": "ken-shoryuken",
+   "label": "SHORYUKEN",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-shoryuken.mp3",
+   "fx": "flame"
+  },
+  {
+   "id": "ken-tatsumaki",
+   "label": "TATSUMAKI",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-tatsumaki.mp3"
+  },
+  {
+   "id": "ken-throw",
+   "label": "THROW",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-throw.mp3"
+  },
+  {
+   "id": "ken-defeat",
+   "label": "DEFEAT",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-defeat.mp3"
+  },
+  {
+   "id": "ken-grunt-1",
+   "label": "GRUNT 1",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-grunt-1.mp3"
+  },
+  {
+   "id": "ken-grunt-2",
+   "label": "GRUNT 2",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-grunt-2.mp3"
+  },
+  {
+   "id": "ken-ouch",
+   "label": "OUCH",
+   "tab": "fighter",
+   "fighter": "ken",
+   "file": "sounds/ken-ouch.mp3"
+  },
+  {
+   "id": "light-swing",
+   "label": "LIGHT SWING",
+   "tab": "hits",
+   "file": "sounds/light-swing.mp3"
+  },
+  {
+   "id": "medium-swing",
+   "label": "MEDIUM SWING",
+   "tab": "hits",
+   "file": "sounds/medium-swing.mp3"
+  },
+  {
+   "id": "hard-swing-1",
+   "label": "HARD SWING 1",
+   "tab": "hits",
+   "file": "sounds/hard-swing-1.mp3"
+  },
+  {
+   "id": "hard-swing-2",
+   "label": "HARD SWING 2",
+   "tab": "hits",
+   "file": "sounds/hard-swing-2.mp3"
+  },
+  {
+   "id": "jab-hit",
+   "label": "JAB HIT",
+   "tab": "hits",
+   "file": "sounds/jab-hit.mp3"
+  },
+  {
+   "id": "strong-hit",
+   "label": "STRONG HIT",
+   "tab": "hits",
+   "file": "sounds/strong-hit.mp3"
+  },
+  {
+   "id": "fierce-hit",
+   "label": "FIERCE HIT",
+   "tab": "hits",
+   "file": "sounds/fierce-hit.mp3"
+  },
+  {
+   "id": "short-hit",
+   "label": "SHORT HIT",
+   "tab": "hits",
+   "file": "sounds/short-hit.mp3"
+  },
+  {
+   "id": "forward-hit",
+   "label": "FORWARD HIT",
+   "tab": "hits",
+   "file": "sounds/forward-hit.mp3"
+  },
+  {
+   "id": "roundhouse-hit",
+   "label": "ROUNDHOUSE HIT",
+   "tab": "hits",
+   "file": "sounds/roundhouse-hit.mp3"
+  },
+  {
+   "id": "electric",
+   "label": "ELECTRIC",
+   "tab": "hits",
+   "file": "sounds/electric.mp3"
+  },
+  {
+   "id": "on-fire",
+   "label": "ON FIRE",
+   "tab": "hits",
+   "file": "sounds/on-fire.mp3"
+  },
+  {
+   "id": "blocked",
+   "label": "BLOCKED",
+   "tab": "hits",
+   "file": "sounds/blocked.mp3"
+  },
+  {
+   "id": "hit-the-ground",
+   "label": "HIT THE GROUND",
+   "tab": "hits",
+   "file": "sounds/hit-the-ground.mp3"
+  },
+  {
+   "id": "landing",
+   "label": "LANDING",
+   "tab": "hits",
+   "file": "sounds/landing.mp3"
+  },
+  {
+   "id": "arcade-hit-1",
+   "label": "ARCADE HIT 1",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-1.mp3"
+  },
+  {
+   "id": "arcade-hit-2",
+   "label": "ARCADE HIT 2",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-2.mp3"
+  },
+  {
+   "id": "arcade-hit-3",
+   "label": "ARCADE HIT 3",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-3.mp3"
+  },
+  {
+   "id": "arcade-hit-4",
+   "label": "ARCADE HIT 4",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-4.mp3"
+  },
+  {
+   "id": "arcade-hit-5",
+   "label": "ARCADE HIT 5",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-5.mp3"
+  },
+  {
+   "id": "arcade-hit-6",
+   "label": "ARCADE HIT 6",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-6.mp3"
+  },
+  {
+   "id": "arcade-hit-7",
+   "label": "ARCADE HIT 7",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-7.mp3"
+  },
+  {
+   "id": "arcade-hit-8",
+   "label": "ARCADE HIT 8",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-8.mp3"
+  },
+  {
+   "id": "arcade-hit-9",
+   "label": "ARCADE HIT 9",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-9.mp3"
+  },
+  {
+   "id": "arcade-hit-10",
+   "label": "ARCADE HIT 10",
+   "tab": "hits",
+   "file": "sounds/arcade-hit-10.mp3"
+  },
+  {
+   "id": "arcade-block",
+   "label": "ARCADE BLOCK",
+   "tab": "hits",
+   "file": "sounds/arcade-block.mp3"
+  },
+  {
+   "id": "clink",
+   "label": "CLINK",
+   "tab": "hits",
+   "file": "sounds/clink.mp3"
+  },
+  {
+   "id": "thud-1",
+   "label": "THUD 1",
+   "tab": "hits",
+   "file": "sounds/thud-1.mp3"
+  },
+  {
+   "id": "thud-2",
+   "label": "THUD 2",
+   "tab": "hits",
+   "file": "sounds/thud-2.mp3"
+  },
+  {
+   "id": "break-wood",
+   "label": "BREAK WOOD",
+   "tab": "hits",
+   "file": "sounds/break-wood.mp3"
+  },
+  {
+   "id": "break-metal",
+   "label": "BREAK METAL",
+   "tab": "hits",
+   "file": "sounds/break-metal.mp3"
+  },
+  {
+   "id": "break-glass",
+   "label": "BREAK GLASS",
+   "tab": "hits",
+   "file": "sounds/break-glass.mp3"
+  },
+  {
+   "id": "metal-clang",
+   "label": "METAL CLANG",
+   "tab": "hits",
+   "file": "sounds/metal-clang.mp3"
+  },
+  {
+   "id": "whoosh-1",
+   "label": "WHOOSH 1",
+   "tab": "hits",
+   "file": "sounds/whoosh-1.mp3"
+  },
+  {
+   "id": "whoosh-2",
+   "label": "WHOOSH 2",
+   "tab": "hits",
+   "file": "sounds/whoosh-2.mp3"
+  },
+  {
+   "id": "zap-1",
+   "label": "ZAP 1",
+   "tab": "hits",
+   "file": "sounds/zap-1.mp3"
+  },
+  {
+   "id": "zap-2",
+   "label": "ZAP 2",
+   "tab": "hits",
+   "file": "sounds/zap-2.mp3"
+  },
+  {
+   "id": "announcer-round",
+   "label": "ROUND",
+   "tab": "announcer",
+   "file": "sounds/announcer-round.mp3"
+  },
+  {
+   "id": "announcer-one",
+   "label": "ONE",
+   "tab": "announcer",
+   "file": "sounds/announcer-one.mp3"
+  },
+  {
+   "id": "announcer-two",
+   "label": "TWO",
+   "tab": "announcer",
+   "file": "sounds/announcer-two.mp3"
+  },
+  {
+   "id": "announcer-three",
+   "label": "THREE",
+   "tab": "announcer",
+   "file": "sounds/announcer-three.mp3"
+  },
+  {
+   "id": "announcer-final",
+   "label": "FINAL",
+   "tab": "announcer",
+   "file": "sounds/announcer-final.mp3"
+  },
+  {
+   "id": "announcer-fight",
+   "label": "FIGHT!",
+   "tab": "announcer",
+   "file": "sounds/announcer-fight.mp3"
+  },
+  {
+   "id": "announcer-perfect",
+   "label": "PERFECT",
+   "tab": "announcer",
+   "file": "sounds/announcer-perfect.mp3"
+  },
+  {
+   "id": "announcer-you-win",
+   "label": "YOU WIN!",
+   "tab": "announcer",
+   "file": "sounds/announcer-you-win.mp3"
+  },
+  {
+   "id": "announcer-you-lose",
+   "label": "YOU LOSE",
+   "tab": "announcer",
+   "file": "sounds/announcer-you-lose.mp3"
+  },
+  {
+   "id": "announcer-brazil",
+   "label": "BRAZIL",
+   "tab": "announcer",
+   "file": "sounds/announcer-brazil.mp3"
+  },
+  {
+   "id": "announcer-china",
+   "label": "CHINA",
+   "tab": "announcer",
+   "file": "sounds/announcer-china.mp3"
+  },
+  {
+   "id": "announcer-india",
+   "label": "INDIA",
+   "tab": "announcer",
+   "file": "sounds/announcer-india.mp3"
+  },
+  {
+   "id": "announcer-japan",
+   "label": "JAPAN",
+   "tab": "announcer",
+   "file": "sounds/announcer-japan.mp3"
+  },
+  {
+   "id": "announcer-spain",
+   "label": "SPAIN",
+   "tab": "announcer",
+   "file": "sounds/announcer-spain.mp3"
+  },
+  {
+   "id": "announcer-thailand",
+   "label": "THAILAND",
+   "tab": "announcer",
+   "file": "sounds/announcer-thailand.mp3"
+  },
+  {
+   "id": "announcer-usa",
+   "label": "USA",
+   "tab": "announcer",
+   "file": "sounds/announcer-usa.mp3"
+  },
+  {
+   "id": "announcer-ussr",
+   "label": "USSR",
+   "tab": "announcer",
+   "file": "sounds/announcer-ussr.mp3"
+  },
+  {
+   "id": "score-count",
+   "label": "SCORE COUNT",
+   "tab": "score",
+   "file": "sounds/score-count.mp3"
+  },
+  {
+   "id": "pause",
+   "label": "PAUSE",
+   "tab": "score",
+   "file": "sounds/pause.mp3"
+  },
+  {
+   "id": "countdown",
+   "label": "COUNTDOWN",
+   "tab": "score",
+   "file": "sounds/countdown.mp3"
+  },
+  {
+   "id": "count-9",
+   "label": "COUNT 9",
+   "tab": "score",
+   "file": "sounds/count-9.mp3"
+  },
+  {
+   "id": "count-8",
+   "label": "COUNT 8",
+   "tab": "score",
+   "file": "sounds/count-8.mp3"
+  },
+  {
+   "id": "count-7",
+   "label": "COUNT 7",
+   "tab": "score",
+   "file": "sounds/count-7.mp3"
+  },
+  {
+   "id": "count-6",
+   "label": "COUNT 6",
+   "tab": "score",
+   "file": "sounds/count-6.mp3"
+  },
+  {
+   "id": "count-5",
+   "label": "COUNT 5",
+   "tab": "score",
+   "file": "sounds/count-5.mp3"
+  },
+  {
+   "id": "count-4",
+   "label": "COUNT 4",
+   "tab": "score",
+   "file": "sounds/count-4.mp3"
+  },
+  {
+   "id": "count-3",
+   "label": "COUNT 3",
+   "tab": "score",
+   "file": "sounds/count-3.mp3"
+  },
+  {
+   "id": "count-2",
+   "label": "COUNT 2",
+   "tab": "score",
+   "file": "sounds/count-2.mp3"
+  },
+  {
+   "id": "count-1",
+   "label": "COUNT 1",
+   "tab": "score",
+   "file": "sounds/count-1.mp3"
+  },
+  {
+   "id": "mode-select",
+   "label": "MODE SELECT",
+   "tab": "score",
+   "file": "sounds/mode-select.mp3"
+  },
+  {
+   "id": "move-cursor",
+   "label": "MOVE CURSOR",
+   "tab": "score",
+   "file": "sounds/move-cursor.mp3"
+  },
+  {
+   "id": "selection",
+   "label": "SELECTION",
+   "tab": "score",
+   "file": "sounds/selection.mp3"
+  },
+  {
+   "id": "crowd",
+   "label": "CROWD",
+   "tab": "stage",
+   "file": "sounds/crowd.mp3"
+  },
+  {
+   "id": "cheering",
+   "label": "CHEERING",
+   "tab": "stage",
+   "file": "sounds/cheering.mp3"
+  },
+  {
+   "id": "booing",
+   "label": "BOOING",
+   "tab": "stage",
+   "file": "sounds/booing.mp3"
+  },
+  {
+   "id": "elephant-1",
+   "label": "ELEPHANT 1",
+   "tab": "stage",
+   "file": "sounds/elephant-1.mp3"
+  },
+  {
+   "id": "elephant-2",
+   "label": "ELEPHANT 2",
+   "tab": "stage",
+   "file": "sounds/elephant-2.mp3"
+  },
+  {
+   "id": "bricks-1",
+   "label": "BRICKS 1",
+   "tab": "stage",
+   "file": "sounds/bricks-1.mp3"
+  },
+  {
+   "id": "bricks-2",
+   "label": "BRICKS 2",
+   "tab": "stage",
+   "file": "sounds/bricks-2.mp3"
+  },
+  {
+   "id": "bricks-3",
+   "label": "BRICKS 3",
+   "tab": "stage",
+   "file": "sounds/bricks-3.mp3"
+  },
+  {
+   "id": "barrels-1",
+   "label": "BARRELS 1",
+   "tab": "stage",
+   "file": "sounds/barrels-1.mp3"
+  },
+  {
+   "id": "barrels-2",
+   "label": "BARRELS 2",
+   "tab": "stage",
+   "file": "sounds/barrels-2.mp3"
+  },
+  {
+   "id": "barrels-3",
+   "label": "BARRELS 3",
+   "tab": "stage",
+   "file": "sounds/barrels-3.mp3"
+  },
+  {
+   "id": "crate-1",
+   "label": "CRATE 1",
+   "tab": "stage",
+   "file": "sounds/crate-1.mp3"
+  },
+  {
+   "id": "crate-2",
+   "label": "CRATE 2",
+   "tab": "stage",
+   "file": "sounds/crate-2.mp3"
+  },
+  {
+   "id": "crate-3",
+   "label": "CRATE 3",
+   "tab": "stage",
+   "file": "sounds/crate-3.mp3"
+  },
+  {
+   "id": "plane",
+   "label": "PLANE",
+   "tab": "stage",
+   "file": "sounds/plane.mp3"
+  }
+ ]
+}

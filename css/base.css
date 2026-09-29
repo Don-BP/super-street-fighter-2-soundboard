@@ -1,0 +1,72 @@
+/* Shared look: colours per fighter, fonts, loader, screen wipe. */
+@font-face {
+  font-family: "SSF2 Large";
+  src: url("../fonts/super-street-fighter-ii-large.otf") format("opentype");
+  font-display: swap;
+}
+:root {
+  /* One place to change the font. The game's own pixel font goes first; the rest is the fallback. */
+  --font: "SSF2 Large", ui-monospace, "Cascadia Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --navy: #0b0d1a;
+  color-scheme: dark;
+}
+body[data-theme="ryu"] { --accent: #5cc8ff; --accent2: #2f7bff; --panel: rgba(8, 18, 44, .78); --edge: #c9d6e8; }
+body[data-theme="ken"] { --accent: #ffc83d; --accent2: #ff5a1f; --panel: rgba(44, 8, 10, .78); --edge: #ffd98a; }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; height: 100%; background: var(--navy); color: #fff; font-family: var(--font);
+  font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  overflow: hidden; overscroll-behavior: none;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+}
+img { image-rendering: pixelated; -webkit-user-drag: none; }
+button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
+button:focus-visible, .plate:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+.screen {
+  position: fixed; inset: 0; height: 100dvh;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+
+.title {
+  margin: 0; text-align: center; line-height: 1.5; font-size: clamp(14px, 4.6vw, 26px);
+  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+.title span { color: #ffd23f; font-size: .8em; }
+
+/* ---- loader ---- */
+#loader {
+  position: fixed; inset: 0; z-index: 5; display: grid; place-content: center; justify-items: center; gap: 22px; padding: 24px;
+  background: radial-gradient(ellipse at 50% 30%, #1b2450 0%, var(--navy) 70%);
+}
+#loader > * { position: relative; z-index: 1; }
+#loader > #heat { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; image-rendering: pixelated; filter: brightness(.7); }
+#loader::after {                                     /* darkens the fire behind the title and loading bar so they stay easy to read */
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 46%, rgba(4, 8, 28, .78) 0%, rgba(4, 8, 28, .45) 55%, rgba(4, 8, 28, .12) 100%);
+}
+.title-art { margin: 0; text-align: center; }
+.title-art img { display: block; width: min(90vw, 480px); height: auto; margin: 0 auto; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .7)) drop-shadow(0 0 14px rgba(40, 90, 255, .6)); }
+.title-art span { display: block; margin-top: 10px; font-size: clamp(12px, 4vw, 20px); color: #ffd23f; text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; }
+.bar { width: min(78vw, 340px); height: 22px; border: 3px solid #fff; padding: 3px; }
+#loader-bar { display: block; height: 100%; width: 0; transition: width .1s linear;
+  background: repeating-linear-gradient(90deg, #5cc8ff 0 8px, transparent 8px 11px); }
+#loader-text { margin: 0; font-size: 11px; color: #cfd8ea; text-shadow: 2px 2px 0 #000; }
+#start { padding: 14px 26px; font-size: clamp(24px, 8vw, 38px); animation: blink 1s steps(2) infinite; }   /* frame comes from board.css */
+@keyframes blink { 50% { filter: brightness(1.5) drop-shadow(0 2px 0 rgba(0, 0, 0, .85)); } }
+
+/* ---- screen wipe (flash + pixel-stepped slide) ---- */
+#wipe {
+  position: fixed; inset: 0; z-index: 50; pointer-events: none; transform: translateX(-101%);
+  background: repeating-linear-gradient(135deg, #fff 0 22px, var(--accent, #5cc8ff) 22px 44px);
+}
+#wipe.in { animation: wipe-in .3s steps(6) forwards; }
+#wipe.out { animation: wipe-out .3s steps(6) forwards; }
+@keyframes wipe-in { from { transform: translateX(-101%); } to { transform: translateX(0); } }
+@keyframes wipe-out { from { transform: translateX(0); } to { transform: translateX(101%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

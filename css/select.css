@@ -1,0 +1,34 @@
+/* Choose-your-fighter screen */
+#select {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  background: #000 url(../img/select/bg.webp) center / cover no-repeat;
+}
+#select::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .1) 35%, rgba(0, 0, 0, .35)); pointer-events: none; }
+#select .title { position: relative; padding-top: 6px; }
+
+.cards {
+  position: relative; flex: 1; min-height: 0; width: min(100%, 760px);
+  display: grid; grid-template-rows: 1fr 1fr; gap: 14px;
+}
+@media (min-aspect-ratio: 1/1) {
+  .cards { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
+}
+.fighter-card {
+  position: relative; overflow: hidden; border: 4px solid #fff; background: #000;
+  transition: transform .12s ease-out, box-shadow .12s;
+}
+.fighter-card[data-fighter="ryu"] { border-color: #8fd8ff; box-shadow: 0 0 22px #2f7bff, 0 6px 0 #000; }
+.fighter-card[data-fighter="ken"] { border-color: #ffd98a; box-shadow: 0 0 22px #ff4b1a, 0 6px 0 #000; }
+.fighter-card .card-bg { position: absolute; inset: 0; background: var(--card-bg) center / cover no-repeat; }
+.fighter-card[data-fighter="ryu"] { --card-bg: radial-gradient(ellipse at 50% 60%, #3a8cff 0%, #123a9a 35%, #060d2c 80%); }
+.fighter-card[data-fighter="ken"] { --card-bg: radial-gradient(ellipse at 50% 60%, #ff8a1f 0%, #a51f0a 38%, #2a0505 80%); }
+.fighter-card .idle { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; }
+.fighter-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, .8)); }
+.fighter-card .name {
+  position: absolute; left: 14px; bottom: 12px; z-index: 1; font-size: clamp(22px, 8vw, 40px);
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+.fighter-card[data-fighter="ryu"] .name { color: #bfe9ff; }
+.fighter-card[data-fighter="ken"] .name { color: #ffe08a; }
+.fighter-card:hover { transform: scale(1.015); }
+.fighter-card:active { transform: scale(.985); }
