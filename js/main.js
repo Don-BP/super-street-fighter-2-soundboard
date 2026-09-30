@@ -92,4 +92,13 @@ async function boot() {
 
 startHeat($('heat'), 'img/title/flames.webp', () => $('loader').hidden);
 boot().catch(err => { console.error(err); $('loader-text').textContent = 'SOMETHING BROKE — RELOAD'; });
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+// Offline support and instant updates: look for a new version every time the site is opened or comes back to the front,
+// and when one takes over, load it (only if this page was already running an older one, so a first visit never reloads).
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  const hadOlder = !!navigator.serviceWorker.controller;
+  let reloading = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadOlder && !reloading) { reloading = true; location.reload(); } });
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
+  }).catch(() => {});
+}
