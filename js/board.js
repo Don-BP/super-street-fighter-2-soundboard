@@ -31,7 +31,7 @@ function bindPlate(plate, { repeat = false, onTap, onHold, onRelease, onStar }) 
 export function createBoard({ catalog, engine, store, layout = {}, emblems = {}, els }) {
   const byId = new Map(catalog.sounds.map(s => [s.id, s]));
   const fighters = new Map(catalog.fighters.map(f => [f.id, f]));
-  const { root, tabsEl, gridEl, nameEl, sizesEl } = els;
+  const { root, tabsEl, gridEl, nameEl, sizesEl, musicEl } = els;
   let fighter = catalog.fighters[0].id, tab = 'fighter';
 
   // url() inside a CSS variable is resolved against the stylesheet, not the page, so hand it a full address.
@@ -108,7 +108,7 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
 
   function renderTabs() {
     tabsEl.innerHTML = '';
-    for (const t of [...catalog.tabs, { id: 'favorites', label: '★' }]) {
+    for (const t of [...catalog.tabs, ...(musicEl ? [{ id: 'music', label: 'MUSIC' }] : []), { id: 'favorites', label: '★' }]) {
       const b = document.createElement('button');
       b.className = 'tab'; b.dataset.tab = t.id; b.setAttribute('role', 'tab');
       b.textContent = t.id === 'fighter' ? fighters.get(fighter).name : t.label;
@@ -157,6 +157,9 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
 
   function showTab(id) {
     tab = id;
+    const isMusic = id === 'music';
+    gridEl.hidden = isMusic; sizesEl.hidden = isMusic; if (musicEl) musicEl.hidden = !isMusic;
+    if (isMusic) return;
     for (const b of tabsEl.children) b.setAttribute('aria-selected', String(b.dataset.tab === id));
     gridEl.classList.remove('swap'); void gridEl.offsetWidth; gridEl.classList.add('swap');
     renderGrid();
@@ -179,6 +182,7 @@ export function createBoard({ catalog, engine, store, layout = {}, emblems = {},
 
   function showFighter(id) {
     fighter = id; tab = 'fighter';
+    gridEl.hidden = false; sizesEl.hidden = false; if (musicEl) musicEl.hidden = true;
     document.body.dataset.theme = fighters.get(id).theme;
     root.style.setProperty('--bg', `url(${abs(`img/bg/${id}.webp`)})`);
     playBackground(id);

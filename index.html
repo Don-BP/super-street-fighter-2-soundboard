@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="css/board.css">
 <link rel="stylesheet" href="css/sheet.css">
 <link rel="stylesheet" href="css/ui-art.css">
+<link rel="stylesheet" href="css/music.css">
 </head>
 <body data-screen="loading" data-theme="ryu">
 <div id="loader">
@@ -49,6 +50,25 @@
     <button data-size="mini" aria-label="Mini buttons">S</button>
   </div>
   <div id="grid" data-size="medium"></div>
+  <div id="music" hidden>
+    <div class="player">
+      <p id="music-title" class="now">PICK A TRACK</p>
+      <div class="seek"><span id="music-cur">0:00</span><input id="music-seek" type="range" min="0" max="1000" value="0" aria-label="Position"><span id="music-len">0:00</span></div>
+      <div class="controls">
+        <button id="music-prev" class="mbtn" aria-label="Previous track"></button>
+        <button id="music-play" class="mbtn big" aria-label="Play"></button>
+        <button id="music-stop" class="mbtn" aria-label="Stop"></button>
+        <button id="music-next" class="mbtn" aria-label="Next track"></button>
+        <button id="music-loop" class="mbtn wide" aria-pressed="false">LOOP ALL</button>
+      </div>
+      <div class="eq">
+        <label>LOW <input id="music-low" type="range" min="-12" max="12" step="1" aria-label="Music low"></label>
+        <label>MID <input id="music-mid" type="range" min="-12" max="12" step="1" aria-label="Music mid"></label>
+        <label>HIGH <input id="music-high" type="range" min="-12" max="12" step="1" aria-label="Music high"></label>
+      </div>
+    </div>
+    <div id="music-list"></div>
+  </div>
 </section>
 <div id="vol-pop" hidden>
   <div class="backdrop"></div>

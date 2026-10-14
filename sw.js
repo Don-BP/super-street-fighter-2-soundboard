@@ -1,5 +1,5 @@
-const CACHE = 'ssf2sb-v11';
-const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/select.css', 'css/board.css', 'css/sheet.css', 'css/ui-art.css', 'fonts/super-street-fighter-ii-large.otf', 'data/plate-layout.json', 'data/emblems.json',
+const CACHE = 'ssf2sb-v12';
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'css/base.css', 'css/select.css', 'css/board.css', 'css/sheet.css', 'css/ui-art.css', 'css/music.css', 'data/music.json', 'js/music.js', 'fonts/super-street-fighter-ii-large.otf', 'data/plate-layout.json', 'data/emblems.json',
   'js/main.js', 'js/store.js', 'js/audio.js', 'js/board.js', 'js/fx.js', 'js/transitions.js', 'js/heat.js', 'img/title/title.webp', 'img/title/flames.webp', 'data/catalog.json',
   'img/icon-192.png', 'img/icon-512.png', 'img/select/bg.webp', 'sounds/ui-press-start.mp3', 'sounds/ui-character-select.mp3',
   'img/bg/ryu.webp', 'img/bg/ken.webp', 'img/select/ryu-idle.webp', 'img/select/ken-idle.webp', 'img/select/ryu-idle-still.webp', 'img/select/ken-idle-still.webp'];
@@ -31,7 +31,7 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
-  if (/\.(mp4|webm)$/.test(url.pathname)) return;      // videos: leave to the browser (iPhones need range requests, which a cache reply cannot answer)
+  if (/\.(mp4|webm|m4a)$/.test(url.pathname)) return;      // videos: leave to the browser (iPhones need range requests, which a cache reply cannot answer)
   const code = /\.(html|css|js|json|webmanifest)$/.test(url.pathname) || url.pathname.endsWith('/');
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);

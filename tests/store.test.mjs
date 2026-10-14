@@ -6,7 +6,7 @@ const fake = (initial = {}) => { const m = new Map(Object.entries(initial)); ret
 
 test('defaults when storage is empty', () => {
   const s = createStore(fake());
-  assert.deepEqual(s.get(), { gridSize: 'medium', volume: 0.9, reverb: 0, echo: 0, eqLow: 0, eqMid: 0, eqHigh: 0, fighter: null,
+  assert.deepEqual(s.get(), { gridSize: 'medium', volume: 0.9, reverb: 0, echo: 0, eqLow: 0, eqMid: 0, eqHigh: 0, musicLow: 0, musicMid: 0, musicHigh: 0, musicLoop: 'all', fighter: null,
     favorites: [], favoriteFx: {} });
 });
 test('settings persist across stores', () => {

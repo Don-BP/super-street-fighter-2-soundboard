@@ -3,6 +3,7 @@ import { SoundEngine } from './audio.js';
 import { createBoard } from './board.js';
 import { wipeTo, showScreen } from './transitions.js';
 import { startHeat } from './heat.js';
+import { createMusic } from './music.js';
 
 const $ = id => document.getElementById(id);
 
@@ -26,10 +27,15 @@ async function boot() {
   const emblems = await (await fetch('data/emblems.json')).json().catch(() => ({}));
   const store = createStore();
   const engine = new SoundEngine();
+  const musicTracks = (await (await fetch('data/music.json')).json().catch(() => ({ tracks: [] }))).tracks;
   const board = createBoard({
     catalog, engine, store, layout, emblems,
-    els: { root: $('board'), tabsEl: $('tabs'), gridEl: $('grid'), nameEl: $('fighter-name'), sizesEl: $('sizes') },
+    els: { root: $('board'), tabsEl: $('tabs'), gridEl: $('grid'), nameEl: $('fighter-name'), sizesEl: $('sizes'), musicEl: musicTracks.length ? $('music') : null },
   });
+  const music = musicTracks.length ? createMusic({
+    engine, store, tracks: musicTracks,
+    els: { listEl: $('music-list'), titleEl: $('music-title'), seekEl: $('music-seek'), curEl: $('music-cur'), lenEl: $('music-len'), playBtn: $('music-play'), stopBtn: $('music-stop'), prevBtn: $('music-prev'), nextBtn: $('music-next'), loopBtn: $('music-loop'), lowEl: $('music-low'), midEl: $('music-mid'), highEl: $('music-high') },
+  }) : null;
 
   const applyFx = s => { engine.setVolume(s.volume); engine.setReverb(s.reverb); engine.setEcho(s.echo); engine.setEq(s.eqLow, s.eqMid, s.eqHigh); };
   const syncSliders = s => { $('vol').value = s.volume * 100; $('vol-quick').value = s.volume * 100; $('vol-num').textContent = Math.round(s.volume * 100); $('reverb').value = s.reverb * 100; $('echo').value = s.echo * 100; $('eq-low').value = s.eqLow; $('eq-mid').value = s.eqMid; $('eq-high').value = s.eqHigh; };
@@ -55,7 +61,7 @@ async function boot() {
   sheet.querySelector('.backdrop').addEventListener('click', closeSheet);
 
   $('stop-all').addEventListener('click', () => engine.stopAll());
-  $('back').addEventListener('click', () => { engine.stopAll(); wipeTo(() => showScreen('select')); });
+  $('back').addEventListener('click', () => { engine.stopAll(); music?.stop(); wipeTo(() => showScreen('select')); });
   for (const card of document.querySelectorAll('.fighter-card'))
     card.addEventListener('click', () => {
       engine.play('ui-select');

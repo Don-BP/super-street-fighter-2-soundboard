@@ -1,7 +1,7 @@
 const KEY = 'ssf2sb.v1';
 const GRIDS = ['large', 'medium', 'mini'];
 const EQ_RANGE = 12;    // decibels either way for each of low, mid and high
-const DEFAULTS = { gridSize: 'medium', volume: 0.9, reverb: 0, echo: 0, eqLow: 0, eqMid: 0, eqHigh: 0, fighter: null };
+const DEFAULTS = { gridSize: 'medium', volume: 0.9, reverb: 0, echo: 0, eqLow: 0, eqMid: 0, eqHigh: 0, musicLow: 0, musicMid: 0, musicHigh: 0, musicLoop: 'all', fighter: null };
 const unit = v => Math.min(1, Math.max(0, Number(v) || 0));
 const decibels = v => Math.round(Math.min(EQ_RANGE, Math.max(-EQ_RANGE, Number(v) || 0)));
 const idList = list => Array.isArray(list) ? [...new Set(list.filter(x => typeof x === 'string'))] : [];
@@ -21,6 +21,8 @@ function clean(raw) {
     reverb: unit(r.reverb),
     echo: unit(r.echo),
     eqLow: decibels(r.eqLow), eqMid: decibels(r.eqMid), eqHigh: decibels(r.eqHigh),
+    musicLow: decibels(r.musicLow), musicMid: decibels(r.musicMid), musicHigh: decibels(r.musicHigh),
+    musicLoop: r.musicLoop === 'one' ? 'one' : 'all',
     fighter: typeof r.fighter === 'string' ? r.fighter : null,
     favorites,
     favoriteFx,

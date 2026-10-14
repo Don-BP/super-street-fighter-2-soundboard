@@ -1,0 +1,68 @@
+{
+ "tracks": [
+  {
+   "file": "music/01 - Japan 1 (Ryu).m4a",
+   "title": "Japan 1 (Ryu)"
+  },
+  {
+   "file": "music/02 - U.S.A. 1 (Ken).m4a",
+   "title": "U.S.A. 1 (Ken)"
+  },
+  {
+   "file": "music/03 - Japan 1 (Ryu) remix.m4a",
+   "title": "Japan 1 (Ryu) remix"
+  },
+  {
+   "file": "music/03 - USA 1 Ken remix.m4a",
+   "title": "USA 1 Ken remix"
+  },
+  {
+   "file": "music/05 - Player Select.m4a",
+   "title": "Player Select"
+  },
+  {
+   "file": "music/06 - The World Warriors.m4a",
+   "title": "The World Warriors"
+  },
+  {
+   "file": "music/07 - Versus.m4a",
+   "title": "Versus"
+  },
+  {
+   "file": "music/08 - Winner.m4a",
+   "title": "Winner"
+  },
+  {
+   "file": "music/09 - Here Comes A New Challenger.m4a",
+   "title": "Here Comes A New Challenger"
+  },
+  {
+   "file": "music/10 - Continue.m4a",
+   "title": "Continue"
+  },
+  {
+   "file": "music/11 - Japan 2 (E.Honda).m4a",
+   "title": "Japan 2 (E.Honda)"
+  },
+  {
+   "file": "music/12 - U.S.A. 2 (Guile).m4a",
+   "title": "U.S.A. 2 (Guile)"
+  },
+  {
+   "file": "music/13 - U.S.S.R..m4a",
+   "title": "U.S.S.R."
+  },
+  {
+   "file": "music/14 - India (Dhalsim).m4a",
+   "title": "India (Dhalsim)"
+  },
+  {
+   "file": "music/15 - China (Chun Li).m4a",
+   "title": "China (Chun Li)"
+  },
+  {
+   "file": "music/16 - Brazil (Blanka).m4a",
+   "title": "Brazil (Blanka)"
+  }
+ ]
+}
