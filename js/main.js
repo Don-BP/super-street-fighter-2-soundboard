@@ -30,7 +30,7 @@ async function boot() {
   const musicTracks = (await (await fetch('data/music.json')).json().catch(() => ({ tracks: [] }))).tracks;
   const board = createBoard({
     catalog, engine, store, layout, emblems,
-    els: { root: $('board'), tabsEl: $('tabs'), gridEl: $('grid'), nameEl: $('fighter-name'), sizesEl: $('sizes'), musicEl: musicTracks.length ? $('music') : null },
+    els: { root: $('board'), tabsEl: $('tabs'), gridEl: $('grid'), nameEl: $('fighter-name'), sizesEl: $('sizes'), musicEl: musicTracks.length ? $('music') : null, musicBtn: $('music-btn') },
   });
   const music = musicTracks.length ? createMusic({
     engine, store, tracks: musicTracks,
